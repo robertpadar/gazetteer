@@ -67,7 +67,6 @@ map.on('locationfound', onLocationFound);
 
 document.getElementById('country').addEventListener('change', function(data) {
     var value = data['target'].value;
-    console.log(value);
     getData(value);
 });
 
