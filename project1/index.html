@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en-US">
+   <head>
+      <title>Gazetteer interactive maps</title>
+      <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Gazetteer interactive maps">
+      <meta name="keywords" content="gazetteer, interactive maps, train lines, cycle lines">
+      
+      <link rel="stylesheet" type="text/css" href="css/style.css">
+
+      <link rel="stylesheet" type="text/css" href="css/leaflet.css" />
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+      <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+      <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css.map" />
+
+      <link rel="stylesheet" type="text/css" href="easybutton/leafletcss.css" /> 
+      <link rel="stylesheet" type="text/css" href="easybutton/easybuttoncss.css">
+
+      <link rel="stylesheet" type="text/css" href="css/spin.css">
+    </head>
+    
+   <body>
+    <nav id="nav" class="navbar fixed-top navbar-expand-lg navbar-light p-md-3">
+      <div class="navbar-inner">
+        <a href="." id="gaz">gazetteer</a>
+        <ul id="colsel">
+          <li class="nav-item">
+            <select class="custom-select" name="country" data-target="#myModal" data-toggle="modal" id="country">  
+              <option id="visible" value="" selected="selected" >Select Country</option>
+            </select>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    
+    <div id="map"></div>
+
+    <div class="easy-button-container leaflet-top leaflet-left">
+      <div id="preloader" class="leaflet-control">
+        <button id="weather" class="easy-button-button" type="button" title="Weather Data">
+          <span class="button-state2">🌥</span>
+        </button>
+      </div>
+      <div id="forecast" class="leaflet-control">
+        <button id="foreCast" class="easy-button-button" type="button" title="Forecast Data">
+          <span class="button-state">☀</span>
+        </button>
+      </div>
+      <div id="windspeed" class="leaflet-control">
+        <button id="wind" class="easy-button-button" type="button" title="Wind Speed">
+          <span>🌬</span>
+        </button>
+      </div>
+      <div id="precipitation" class="leaflet-control">
+        <button id="rain" class="easy-button-button" type="button" title="Rain">
+          <span>⛈</span>
+        </button>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="js/jquery-2.2.3.min.js"></script>
+    <script type='text/javascript' src='js/leaflet.js'></script>
+    <script type="text/javascript" src="js/spin.js"></script>
+    <script type='text/javascript' src='easybutton/easybutton.js'></script>
+    <script type='text/javascript' src='js/bootstrap.js'></script>
+    <script type='text/javascript' src='js/bootstrap.bundle.js'></script>
+    <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
+    <script type='text/javascript' src='js/weather.js'></script>
+    <script type='text/javascript' src='js/script.js'></script>
+   </body>
+</html>

@@ -1,0 +1,165 @@
+html { 
+    height: 100%;
+
+}
+body { 
+    height: 100%; 
+    margin: 0; 
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+#map {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+#nav {
+    top: 0px;
+    left: 80px;
+    right: 80px;
+    display: block;
+    background: none;
+    height: 70px;
+}
+.navbar-inner {
+    display: inline-block;
+    background-color:transparent;
+}
+#colsel {
+    margin-left: 200px;
+    display: inline-block;
+    text-align: right;
+    list-style: none;
+    padding-top: 22px;
+}
+#gaz {
+    display: inline-block;
+    width: 70px;
+    color: aqua!important;
+    text-decoration: none!important;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 30px;
+    text-shadow: 2px 1px blueviolet;
+}
+#country {  
+    margin-right: 60px;
+    padding-right: 100px;
+}
+table img {
+    width: 200px!important;
+}
+table td {
+    text-align: center;
+}
+.leaflet-popup div {
+    text-align: center!important;
+}
+.easy-button-container {
+    position: absolute;
+    top: 100px!important;
+}
+#leaflet-bar {
+    border: 2 solid black;
+}
+.leaflet-control {
+    position: absolute;
+    margin-left: 9px;
+    margin-top: 10px;
+}
+.easy-button-button {
+    /*background-color: rgb(250, 250, 250);
+    border: 1 solid gray;*/
+    box-shadow: 0 1px 5px rgb(0 0 0 / 50%);
+    border-radius: 4px
+}
+.custom-popup .leaflet-popup-content-wrapper {
+    background-image: linear-gradient(to bottom right, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sunny {
+	position: relative;
+	width: 30px!important;
+	height: 30px!important;
+}
+.sunny, .partly_cloudy__sun {
+	content: "";
+	position: absolute;
+	height: 80%;
+	width: 80%;
+	border-radius: 50%;
+	z-index: 2;
+	background-color: #f1c40f;
+	background-image: radial-gradient(#f1c40f, #f39c12);
+	box-shadow: 0 0 25px #917508;
+}
+.card, h1 h1 p {
+    color: blanchedalmond;
+    background-image: url("https://i.imgur.com/dpqZJV5.jpg");
+    background-size: cover;
+    width: 600px!important;
+    border-radius: 20px;
+    box-shadow: 0px 8px 16px 4px #9E9E9E;
+}
+.time-font {
+    font-size: 50px
+}
+.sm-font {
+    font-size: 18px
+}
+.med-font {
+    font-size: 28px
+}
+
+@media only screen and (max-width: 840px) {
+    /* For mobile phones: */
+    [class*="col-"] {
+      width: 100%;
+    }
+    #colsel {
+        width: 280px;
+        margin-left: 40px;
+        display: inline-block;
+        text-align: right;
+        list-style: none;
+        padding-top: 22px;
+    }
+    #country {
+        padding-right: 50px;
+    }
+    #nav {
+        display: block;
+        background-size: 100%;
+        height: 70px;
+    }
+}
+
+@media only screen and (max-width: 590px) {
+    #colsel {
+        width: 240px;
+        margin-left: 0px;
+        display: inline-block;
+        text-align: right;
+        list-style: none;
+        padding-top: 22px;
+        padding-left: 0px;
+    }
+    body {
+      background-color: lightblue; 
+    }
+    #country {
+        padding-right: 10px;
+    }
+    #nav {
+        left: 60px;
+        display: block;
+        background-size: 100%;
+        height: 70px;
+    }
+    #gaz {
+        display: none;
+    }
+}
