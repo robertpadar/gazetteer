@@ -7,7 +7,7 @@ $executionStartTime = microtime(true);
 
 $country = $_REQUEST['temp']; 
 
-$url='https://api.connexun.com/news/inter-country?country1=' . $country . '&limit=1&langs=en&country2=it';
+$url='https://newsapi.org/v2/top-headlines?country=' . $country . '&apiKey=4c8f174d3d0e4a038204c6f574f99018';
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
