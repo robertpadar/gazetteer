@@ -49,32 +49,194 @@ function getWeather() {
             success: function(result) {
                 
                 if (result.status.name == "ok") {
-                    
-                    var stationName = result['data']['list']['0']['name'];
-                    var countryCode = result['data']['list']['0']['sys'].country;
-                    var temperature = result['data']['list']['0']['main'].temp;
-                    var clouds = result['data']['list']['0']['weather']['0'].description;
-                    var datetime = result['data']['list']['0'];
-                    var windSpeed = result['data']['list']['0']
-                    temperature = temperature - 273;
-                    console.log(clouds);
-                    console.log(result['data']['list']['0']['rain']);
-                    var popup = L.popup({
+                    if(result['data']['status']) {
+                        alert("No data found");
+                    }
+                    var stationName = result['data']['weatherObservation']['stationName'];
+                    var countryCode = result['data']['weatherObservation']['countryCode'];
+                    var temperature = result['data']['weatherObservation']['temperature'];
+                    var cloudsCode = result['data']['weatherObservation']['cloudsCode'];
+                    var clouds = result['data']['weatherObservation']['clouds'];
+                    var datetime = result['data']['weatherObservation']['datetime'];
+                    var weather = result['data']['weatherObservation']['weatherCondition'];
+                    var weatherCondition = " ";
+                    if(weather == "n/a") {
+                    } else {
+                        weatherCondition += weather;
+                    }
+                    const d = new Date(datetime);
+                    let dayInNum = d.getDay();
+                    let day = [];
+                    if(dayInNum == "1") {day.push("Monday")}
+                    if(dayInNum == "2") {day.push("Tuesday")}
+                    if(dayInNum == "3") {day.push("Wednesday")}
+                    if(dayInNum == "4") {day.push("Thursday")}
+                    if(dayInNum == "5") {day.push("Friday")}
+                    if(dayInNum == "6") {day.push("Saturday")}
+                    if(dayInNum == "7") {day.push("Sunday")}
+                    if(weatherCondition.includes("snow")) {
+                        var popup = L.popup({
                         className: 'weather-popup',
                         //offset: [180, 250]
-                    })
-                    .setContent('<div class="container-fluid mx-auto">' +
-                    '<div class="row d-flex justify-content-center px-3">' +
-                        '<div class="card">' +
+                        })
+                       .setContent('<div class="container-fluid mx-auto">' +
+                       '<div class="row d-flex justify-content-center px-3">' +
+                           '<div class="card snow">' +
+                           '<h2 class="ml-auto mr-4 mt-3 mb-0">' + stationName + 
+                           '&nbsp;&nbsp;' + countryCode + '</h2>' +
+                           '<p class="ml-auto mr-4 mb-0 med-font">' + clouds + '</p>' +
+                           '<h1 class="ml-auto mr-4 large-font">' + temperature + '&#176;</h1>' +
+                           '<p class="time-font mb-0 ml-4 mt-auto">' + datetime.slice(11,16) +
+                           '<p class="ml-4 mb-4">'+ day + '&nbsp;&nbsp;' + datetime.slice(0, 11) + '</p>' +
+                               '</div>)' +
+                           '</div>' +
+                        '</div>')
+                    }
+                    if(cloudsCode == "BKN" || cloudsCode == "FEW" ||  cloudsCode == "CAVOK" ||   cloudsCode == "SCT" || cloudsCode == "NSC") {
+                        if(weatherCondition.includes("snow")) {
+                            var popup = L.popup({
+                            className: 'weather-popup',
+                            //offset: [180, 250]
+                            })
+                           .setContent('<div class="container-fluid mx-auto">' +
+                           '<div class="row d-flex justify-content-center px-3">' +
+                               '<div class="card snow">' +
+                               '<h2 class="ml-auto mr-4 mt-3 mb-0">' + stationName + 
+                               '&nbsp;&nbsp;' + countryCode + '</h2>' +
+                               '<p class="ml-auto mr-4 mb-0 med-font">' + clouds + ', snow</p>' +
+                               '<h1 class="ml-auto mr-4 large-font">' + temperature + '&#176;</h1>' +
+                               '<p class="time-font mb-0 ml-4 mt-auto">' + datetime.slice(11,16) +
+                               '<p class="ml-4 mb-4">'+ day + '&nbsp;&nbsp;' + datetime.slice(0, 11) + '</p>' +
+                                   '</div>)' +
+                               '</div>' +
+                            '</div>')
+                        } else if(weatherCondition.includes("rain")) {
+                            var popup = L.popup({
+                            className: 'weather-popup',
+                            //offset: [180, 250]
+                            })
+                           .setContent('<div class="container-fluid mx-auto">' +
+                           '<div class="row d-flex justify-content-center px-3">' +
+                               '<div class="card rain">' +
+                               '<h2 class="ml-auto mr-4 mt-3 mb-0">' + stationName + 
+                               '&nbsp;&nbsp;' + countryCode + '</h2>' +
+                               '<p class="ml-auto mr-4 mb-0 med-font">' + clouds + ', rain</p>' +
+                               '<h1 class="ml-auto mr-4 large-font">' + temperature + '&#176;</h1>' +
+                               '<p class="time-font mb-0 ml-4 mt-auto">' + datetime.slice(11,16) +
+                               '<p class="ml-4 mb-4">'+ day + '&nbsp;&nbsp;' + datetime.slice(0, 11) + '</p>' +
+                                   '</div>)' +
+                               '</div>' +
+                            '</div>')
+                        } else {
+                            var popup = L.popup({
+                                className: 'weather-popup',
+                                //offset: [180, 250]
+                            })
+                            .setContent('<div class="container-fluid mx-auto">' +
+                            '<div class="row d-flex justify-content-center px-3">' +
+                                '<div class="card clouds">' +
+                                    '<h2 class="ml-auto mr-4 mt-3 mb-0">' + stationName + 
+                                    '&nbsp;&nbsp;' + countryCode + '</h2>' +
+                                    '<p class="ml-auto mr-4 mb-0 med-font">' + clouds + '</p>' +
+                                    '<h1 class="ml-auto mr-4 large-font">' + temperature + '&#176;</h1>' +
+                                    '<p class="time-font mb-0 ml-4 mt-auto">' + datetime.slice(11,16) +
+                                    '<p class="ml-4 mb-4">'+ day + '&nbsp;&nbsp;' + datetime.slice(0, 11) + '</p>' +
+                                    '</div>)' +
+                                '</div>' +
+                            '</div>')
+                        }
+                    }
+                    if(cloudsCode == "OVC") {
+                        if(weatherCondition.includes("snow")) {
+                            var popup = L.popup({
+                            className: 'weather-popup',
+                            //offset: [180, 250]
+                            })
+                           .setContent('<div class="container-fluid mx-auto">' +
+                           '<div class="row d-flex justify-content-center px-3">' +
+                               '<div class="card snow">' +
+                               '<h2 class="ml-auto mr-4 mt-3 mb-0">' + stationName + 
+                               '&nbsp;&nbsp;' + countryCode + '</h2>' +
+                               '<p class="ml-auto mr-4 mb-0 med-font">' + clouds + ', snow</p>' +
+                               '<h1 class="ml-auto mr-4 large-font">' + temperature + '&#176;</h1>' +
+                               '<p class="time-font mb-0 ml-4 mt-auto">' + datetime.slice(11,16) +
+                               '<p class="ml-4 mb-4">'+ day + '&nbsp;&nbsp;' + datetime.slice(0, 11) + '</p>' +
+                                   '</div>)' +
+                               '</div>' +
+                            '</div>')
+                        } else if(weatherCondition.includes("rain")) {
+                            var popup = L.popup({
+                            className: 'weather-popup',
+                            //offset: [180, 250]
+                            })
+                           .setContent('<div class="container-fluid mx-auto">' +
+                           '<div class="row d-flex justify-content-center px-3">' +
+                               '<div class="card rain">' +
+                               '<h2 class="ml-auto mr-4 mt-3 mb-0">' + stationName + 
+                               '&nbsp;&nbsp;' + countryCode + '</h2>' +
+                               '<p class="ml-auto mr-4 mb-0 med-font">' + clouds + ', rain</p>' +
+                               '<h1 class="ml-auto mr-4 large-font">' + temperature + '&#176;</h1>' +
+                               '<p class="time-font mb-0 ml-4 mt-auto">' + datetime.slice(11,16) +
+                               '<p class="ml-4 mb-4">'+ day + '&nbsp;&nbsp;' + datetime.slice(0, 11) + '</p>' +
+                                   '</div>)' +
+                               '</div>' +
+                            '</div>')
+                        } else {
+                            var popup = L.popup({
+                                className: 'weather-popup',
+                                //offset: [180, 250]
+                            })
+                            .setContent('<div class="container-fluid mx-auto">' +
+                            '<div class="row d-flex justify-content-center px-3">' +
+                                '<div class="card overcast">' +
+                                    '<h2 class="ml-auto mr-4 mt-3 mb-0">' + stationName + 
+                                    '&nbsp;&nbsp;' + countryCode + '</h2>' +
+                                    '<p class="ml-auto mr-4 mb-0 med-font">' + clouds + '</p>' +
+                                    '<h1 class="ml-auto mr-4 large-font">' + temperature + '&#176;</h1>' +
+                                    '<p class="time-font mb-0 ml-4 mt-auto">' + datetime.slice(11,16) +
+                                    '<p class="ml-4 mb-4">'+ day + '&nbsp;&nbsp;' + datetime.slice(0, 11) + '</p>' +
+                                    '</div>)' +
+                                '</div>' +
+                            '</div>')
+                        }
+                    }
+                    if(cloudsCode == "Mist") {
+                        var popup = L.popup({
+                            className: 'weather-popup',
+                            //offset: [180, 250]
+                        })
+                        .setContent('<div class="container-fluid mx-auto">' +
+                        '<div class="row d-flex justify-content-center px-3">' +
+                            '<div class="card mist">' +
                             '<h2 class="ml-auto mr-4 mt-3 mb-0">' + stationName + 
                             '&nbsp;&nbsp;' + countryCode + '</h2>' +
-                            '<p class="ml-auto mr-4 mb-0 med-font">Snow</p>' +
-                            '<h1 class="ml-auto mr-4 large-font">' + temperature.toFixed(1) + '&#176;</h1>' +
-                            '<p class="time-font mb-0 ml-4 mt-auto">08:30 <span class="sm-font">AM</span></p>' +
-                            '<p class="ml-4 mb-4">Wednesday, 18 October 2019</p>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>')
+                            '<p class="ml-auto mr-4 mb-0 med-font">' + clouds + '</p>' +
+                            '<h1 class="ml-auto mr-4 large-font">' + temperature + '&#176;</h1>' +
+                            '<p class="time-font mb-0 ml-4 mt-auto">' + datetime.slice(11,16) +
+                            '<p class="ml-4 mb-4">'+ day + '&nbsp;&nbsp;' + datetime.slice(0, 11) + '</p>' +
+                                '</div>)' +
+                            '</div>' +
+                        '</div>')
+                    }
+                    if(cloudsCode == "Clear" || clouds == "n/a" || cloudsCode == "NCD") {
+                        var popup = L.popup({
+                            className: 'weather-popup',
+                            //offset: [180, 250]
+                        })
+                        .setContent('<div class="container-fluid mx-auto">' +
+                        '<div class="row d-flex justify-content-center px-3">' +
+                            '<div class="card clear-sky">' +
+                            '<h2 class="ml-auto mr-4 mt-3 mb-0">' + stationName + 
+                            '&nbsp;&nbsp;' + countryCode + '</h2>' +
+                            '<p class="ml-auto mr-4 mb-0 med-font">Clear Sky</p>' +
+                            '<h1 class="ml-auto mr-4 large-font">' + temperature + '&#176;</h1>' +
+                            '<p class="time-font mb-0 ml-4 mt-auto">' + datetime.slice(11,16) +
+                            '<p class="ml-4 mb-4">'+ day + '&nbsp;&nbsp;' + datetime.slice(0, 11) + '</p>' +
+                                '</div>)' +
+                            '</div>' +
+                        '</div>')
+                    }
+                    
                     /*('<div>'+
                     '<b>' + stationName + '</b><br>'+
                     "Country Code: "+'<b>' + countryCode + '</b><br>'+

@@ -57,18 +57,23 @@ var baseMaps = {
 
 L.control.layers(baseMaps).addTo(map);
 
+var iso3 = "";
+
 var userLocation = map.locate({setView: true, maxZoom: 7});
 function onLocationFound(e) {
-    //L.marker(e.latlng).addTo(map)
-        //.bindPopup("Your nearby location").openPopup();
     userCountry(e.latlng);
 }
 map.on('locationfound', onLocationFound);
 
 document.getElementById('country').addEventListener('change', function(data) {
-    var value = data['target'].value;
-    //console.log(value);
-    getData(value);
+    iso3 = data['target'].value;
+    getData(iso3);
+});
+document.getElementById('earthquake').addEventListener('click', function() {
+    earthQuake(iso3)
+});
+document.getElementById('covid').addEventListener('click', function() {
+    covid(iso3);
 });
 
 var opts = {
@@ -106,6 +111,7 @@ function userCountry(locate) {
             lng: lng,
         },
         success: function(result) {
+            iso3 += result['data']['countryCode'];
             $('#visible').html(result['data']['countryName']);
             getData(result['data']['countryCode']);
         },
@@ -156,7 +162,7 @@ function getData(code) {
             var countryCode= code.toLowerCase();
             var languages = countryArray.languages;
             var currencies = countryArray.currencies;
-            currenciesName = Object.values(currencies)[0];
+            var currenciesName = Object.values(currencies)[0];
             
             $.ajax({
                 url:  "php/getNews.php",
@@ -191,7 +197,7 @@ function getData(code) {
                             "<tr>" +
                                 "<td colspan='2' id='space'>" + "<b> " + countryArray['altSpellings']['1'] +  
                                 " (" + countryArray['cca2'] + ")" + " </b>" + "</td>" + 
-                            "</tr>" + 
+                            "</tr>" +
                             "<tr>" +
                                 "<td> Country: </td>" + 
                                 "<td>" + countryArray['name']['common'] + "</td>" +
@@ -209,15 +215,19 @@ function getData(code) {
                                 "<td>" + countryArray['area'] + " Km<sup>2</sup>"+ "</td>" +
                             "</tr>" + 
                             "<tr>" +
+                                "<td> Population: </td>" + 
+                                "<td>" + countryArray['population'] + "</td>" +
+                            "</tr>" +
+                            "<tr>" +
                                 "<td> Currencies: </td>" + 
                                 "<td> " + currenciesName.name + "&emsp;" + currenciesName.symbol + "</td>" + 
                             "</tr>" +
                             "<tr>" +
                                 "<td> Lat&Lng: </td>" + 
                                 "<td>" + countryArray['latlng'] + "</td>" +
-                            "</tr>" + 
+                            "</tr>" +
                         "</table>"
-                    );
+                    )
                     $.ajax({
                         url:  "php/getGeoJson.php",
                         type: 'POST',
@@ -238,7 +248,7 @@ function getData(code) {
                     alert(textStatus + ' : '  + jqXHR.status + ', ' + errorThrown);
                 }
             }) 
-        }, 
+        },
         complete: function (){
             spinner.stop();
         },
@@ -246,5 +256,147 @@ function getData(code) {
             alert(textStatus + ' : '  + jqXHR.status + ', ' + errorThrown);
         }
     })
-    
+}
+
+function earthQuake(code) {
+    $.ajax({
+        url: 'php/getEarthquakes.php',
+        type: 'POST',
+        loadingControl: true,
+        dataType: 'json',
+        data: {
+            country: code,
+        },
+        success: function(response) {
+            var event = response['data']['earthquakes'];
+            for(i=0; i<event.length; i++) {
+                var lat = event[i]['lat'];
+                var lng = event[i]['lng'];
+                var datetime = event[i]['datetime'];
+                var depth = event[i]['depth'];
+                var magnitude = event[i]['magnitude'];
+                var radius = [];
+                if(event[i]['magnitude'] < 5) {
+                    radius.push(7000);
+                } else if(event[i]['magnitude'] >= 5 & event[i]['magnitude'] < 7) {
+                    radius.push(12000);
+                } else if(event[i]['magnitude'] >= 7) {
+                    radius.push(18000)
+                }
+                circle = L.circle([lat, lng], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: radius
+                }).addTo(map);
+                var popup = L.popup({
+                    className: 'blink',
+                    offset: [-100, 15],
+                    //autoPanPadding: [100,100]
+                })
+                .setContent('<table>' +
+                        "<tr>" +
+                            "<td> Datetime: </td>" +
+                            "<td> " + datetime +
+                        "</tr>" +
+                        "<tr>" +
+                            "<td> Depth: </td>" +
+                            "<td> " + depth +
+                        "</tr>" +
+                        "<tr>" +
+                            "<td> Magnitude: </td>" +
+                            "<td>" + magnitude +
+                        "</tr>" +
+                    '</table>');
+                circle.bindPopup(popup);
+            };
+        },
+        error: function(jqXHR,textStatus,errorThrown,){
+            alert(textStatus + ' : '  + jqXHR.status + ', ' + errorThrown);
+        }
+    })
+}
+
+function covid(code) {
+    $.ajax({
+        url: 'php/getCovid-19.php',
+        type: 'POST',
+        loadingControl: true,
+        dataType: 'json',
+        data: {
+            iso2: code,
+        },
+        success: function(response) {
+            if(response['data'] == '') {
+                var url = 'no data';
+                var description = 'no data';
+                var pic = 'https://biohitech.files.wordpress.com/2014/05/no-data1.png';
+            }                
+            var popup = L.popup({
+                className: 'blink',
+                offset: [-100, 0],
+                //autoPanPadding: [100,100]
+            })
+            .setContent("<table id='tableContent'>" +
+                    "<tr>" +
+                        "<td colspan='2' id='popup-img'><img src=" + 
+                        response['data']['countryInfo']['flag'] + " id='flag' ></img></td>" + 
+                    "</tr>" +
+                    "<tr>" +
+                        "<td colspan='2' id='space'>" + "<b> " + response['data']['country'] +  
+                        " (" + response['data']['countryInfo']['iso2'] + ")" + " </b>" + "</td>" + 
+                    "</tr>" +
+                    "<tr>" + 
+                        "<td> Population: </td>"  + 
+                        "<td>" + response['data']['population'] + "</td>" +
+                    "</tr>" + 
+                    "<tr>" + 
+                        "<td> Continent: </td>"  + 
+                        "<td>" + response['data']['continent'] + "</td>" +
+                    "</tr>" + 
+                    "<tr>" + 
+                        "<td> Active cases: </td>"  + 
+                        "<td> " + response['data']['active'] + "</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td> All cases: </td>" + 
+                        "<td>" + response['data']['cases'] + "</td>" +
+                    "</tr>" + 
+                    "<tr>" +
+                        "<td> Critical: </td>" + 
+                        "<td>" + response['data']['critical'] + "</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td> Deaths: </td>" + 
+                        "<td> " + response['data']['deaths'] + "</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td> Recovered: </td>" + 
+                        "<td>" + response['data']['recovered'] + "</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td> Tests used: </td>" + 
+                        "<td>" + response['data']['tests'] + "</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td> Today Cases: </td>" + 
+                        "<td>" + response['data']['todayCases'] + "</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td> Today Deaths: </td>" + 
+                        "<td>" + response['data']['todayDeaths'] + "</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td> Today Recovered: </td>" + 
+                        "<td>" + response['data']['todayRecovered'] + "</td>" +
+                    "</tr>" +
+                "</table>"
+            )
+            var marker = L.marker([response['data']['countryInfo']['lat'], response['data']['countryInfo']['long']]).addTo(map);
+            marker.bindPopup(popup).openPopup();
+        },
+        error: function(jqXHR,textStatus,errorThrown,){
+            alert(textStatus + ' : '  + jqXHR.status + ', ' + errorThrown);
+        }
+    })
 }
