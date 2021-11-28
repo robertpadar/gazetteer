@@ -98,11 +98,35 @@ table td {
 }
 .card, h1 h1 p {
     color: blanchedalmond;
-    background-image: url("https://i.imgur.com/dpqZJV5.jpg");
-    background-size: cover;
     width: 600px!important;
     border-radius: 20px;
     box-shadow: 0px 8px 16px 4px #9E9E9E;
+}
+.snow {
+    background-image: url("https://i.imgur.com/dpqZJV5.jpg");
+    background-size: cover;
+}
+.rain {
+    background-image: url("https://wallpaper.dog/large/427768.jpg");
+    background-size: cover;
+}
+.clouds {
+    background-image: url("https://www.pixelstalk.net/wp-content/uploads/2016/07/Download-Free-Weather-Background.jpg");
+    background-size: cover;
+}
+.mist {
+    color: rgb(155, 138, 113);
+    background-image: url("https://c.pxhere.com/photos/63/35/bend_dangerous_fog_foggy_mist_misty_road-1087425.jpg!d");
+    background-size: cover;
+}
+.clear-sky {
+    background-image: url("https://cdn.wallpapersafari.com/95/13/uxb7jk.jpg");
+    background-size: cover;
+}
+.overcast {
+    color: rgb(212, 202, 187);
+    background-image: url("https://scoundreltime.com/wp-content/uploads/2017/01/Cloudy-Weather-HD-Wallpapers-9.jpg");
+    background-size: cover;
 }
 .time-font {
     font-size: 50px
@@ -113,7 +137,6 @@ table td {
 .med-font {
     font-size: 28px
 }
-
 @media only screen and (max-width: 840px) {
     /* For mobile phones: */
     [class*="col-"] {
